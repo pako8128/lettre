@@ -227,10 +227,15 @@ pub struct MultiPartBuilder {
 
 impl MultiPartBuilder {
     /// Creates default multipart builder
+    ///
+    /// Note: the default kind is [`MultiPartKind::Mixed`]. you can overwrite it by calling
+    /// [`Self::kind()`]
     pub fn new() -> Self {
-        Self {
-            headers: Headers::new(),
-        }
+        let mut headers = Headers::new();
+        headers.set(ContentType::from_mime(
+            MultiPartKind::Mixed.to_mime::<String>(None),
+        ));
+        Self { headers }
     }
 
     /// Set a header
